@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon",
+    "build": "tsc && cpx \"src/**/*.graphql\" \"build\" && cpx \"config/*\" \"build/config/\"",
+    "postbuild": "cpx \"package.json\" \"build\" && cpx \"package-lock.json\" \"build\" && cd build && npm install --loglevel error",
+    "clear": "rimraf ./build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^14.0.14",
+    "apollo-server": "^2.15.0",
+    "apollo-server-express": "^2.15.0",
+    "express": "^4.17.1",
+    "graphql": "^15.1.0",
+    "nodemon": "^2.0.4",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  }
+}
