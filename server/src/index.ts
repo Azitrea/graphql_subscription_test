@@ -1,54 +1,11 @@
 import * as http from 'http';
-import { ApolloServer, gql ,PubSub } from 'apollo-server-express';
+import { ApolloServer } from 'apollo-server-express';
 import * as express from 'express';
-
-const typeDefs = gql`
-
-  type Subscription {
-    postAdded: Post
-  }
-
-  type Query {
-    posts: [Post]
-  }
-
-  type Mutation {
-    addPost(author: String, comment: String): Post
-  }
-
-  type Post {
-    author: String
-    comment: String
-  }
-`
-const pubsub = new PubSub();
-const POST_ADDED = 'POST_ADDED';
-
-const resolvers = {
-
-  Subscription: {
-    postAdded: {
-      // Additional event labels can be passed to asyncIterator creation
-      subscribe: () => pubsub.asyncIterator([POST_ADDED]),
-    },
-  },
-  Query: {
-    posts(root, args, context) {
-      return [{ author: 'JJ', comment: 'TTESSST1' }]
-    },
-  },
-  Mutation: {
-    addPost(root, args, context) {
-
-      pubsub.publish(POST_ADDED, { postAdded: args });
-      return args;
-    },
-  },
-};
+import { getGraphQLEndpoint } from './graphql_resolvers'
 
 const PORT = 4000;
 const app = express();
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer(getGraphQLEndpoint());
 
 server.applyMiddleware({app})
 
